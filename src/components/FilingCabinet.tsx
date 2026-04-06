@@ -55,7 +55,7 @@ const FilingCabinet = () => {
         {folders.map((f, i) => {
           const w = minW + (maxW - minW) * (i / (total - 1));
           const isHovered = hoveredIdx === i;
-          const anyHovered = hoveredIdx !== null;
+          
           const offsetX = (maxW - w) / 2;
           const top = i * rowH;
 
