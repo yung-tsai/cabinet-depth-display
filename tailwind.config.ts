@@ -47,6 +47,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        cabinet: {
+          bg: "hsl(var(--cabinet-bg))",
+          folder: "hsl(var(--cabinet-folder))",
+          border: "hsl(var(--cabinet-border))",
+          number: "hsl(var(--cabinet-number))",
+          label: "hsl(var(--cabinet-label-color))",
+          "label-bg": "hsl(var(--cabinet-label-bg, 50 90% 85%))",
+          labelText: "hsl(var(--cabinet-label-text, 40 30% 25%))",
+          labelBorder: "hsl(var(--cabinet-label-border, 45 50% 70%))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
