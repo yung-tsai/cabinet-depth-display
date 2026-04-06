@@ -1,32 +1,37 @@
 const BoxIllustration = () => {
-  const sw = 2.5; // stroke width
+  const sw = 2.5;
   const c = "#1a1a1a";
   const bg = "#f0efec";
   const purple = "#8b7fdb";
 
-  // Box dimensions
-  const bx = 60, by = 220, bw = 400, bh = 260, br = 10;
-
-  // Folders (back to front, staggered tabs)
-  const folders = [
-    { tabX: 30, tabW: 110 },
-    { tabX: 140, tabW: 120 },
-    { tabX: 60, tabW: 130 },
-    { tabX: 180, tabW: 100 },
-    { tabX: 90, tabW: 120 },
-  ];
-
-  const innerL = bx + 8;
-  const innerR = bx + bw - 8;
-  const innerW = innerR - innerL;
-  const folderSpacing = 22;
-  const tabH = 30;
+  const bx = 60, bw = 400, bh = 240, br = 10;
+  // Folders config
+  const folderCount = 5;
+  const folderSpacing = 24;
+  const tabH = 32;
   const tabR = 10;
+  const innerPad = 8;
+  const innerL = bx + innerPad;
+  const innerR = bx + bw - innerPad;
+  const innerW = innerR - innerL;
+
+  // The folders stick out above the box top
+  const foldersTopY = 40;
+  const boxTopY = foldersTopY + folderCount * folderSpacing + tabH + 8;
+  const totalH = boxTopY + bh + 20;
+
+  const folders = [
+    { tabX: 20, tabW: 120 },
+    { tabX: 150, tabW: 130 },
+    { tabX: 50, tabW: 140 },
+    { tabX: 200, tabW: 110 },
+    { tabX: 100, tabW: 120 },
+  ];
 
   // Lines on box front
   const lineCount = 7;
-  const lineStart = by + 55;
-  const lineEnd = by + bh - 20;
+  const lineStart = boxTopY + 55;
+  const lineEnd = boxTopY + bh - 20;
   const lineGap = (lineEnd - lineStart) / (lineCount - 1);
 
   return (
@@ -34,22 +39,26 @@ const BoxIllustration = () => {
       className="flex flex-col items-center justify-center min-h-screen"
       style={{ backgroundColor: bg }}
     >
-      <svg width="520" height="520" viewBox="0 0 520 520">
-        {/* Back wall top edge */}
+      <svg width="520" height={totalH} viewBox={`0 0 520 ${totalH}`}>
+        {/* Back wall */}
         <rect
-          x={bx} y={by - 14} width={bw} height={18}
+          x={bx} y={boxTopY - 14} width={bw} height={18}
           rx={6} fill={bg} stroke={c} strokeWidth={sw}
         />
+        {/* Side walls going up to contain folders */}
+        <line x1={bx} y1={foldersTopY + tabH} x2={bx} y2={boxTopY} stroke={c} strokeWidth={sw} />
+        <line x1={bx + bw} y1={foldersTopY + tabH} x2={bx + bw} y2={boxTopY} stroke={c} strokeWidth={sw} />
 
-        {/* Dark interior */}
+        {/* Dark interior behind folders */}
         <rect
-          x={bx + 4} y={by - 2} width={bw - 8} height={folders.length * folderSpacing + tabH + 10}
+          x={bx + 1} y={foldersTopY + tabH - 2}
+          width={bw - 2} height={boxTopY - foldersTopY - tabH + 8}
           fill={c}
         />
 
-        {/* Folders */}
+        {/* Folders (back to front) */}
         {folders.map((f, i) => {
-          const bodyY = by + 6 + i * folderSpacing + tabH;
+          const bodyY = foldersTopY + i * folderSpacing + tabH;
           const tabTop = bodyY - tabH;
 
           return (
@@ -66,7 +75,7 @@ const BoxIllustration = () => {
                 `}
                 fill={bg} stroke={c} strokeWidth={sw - 0.5}
               />
-              {/* Folder body */}
+              {/* Folder body fills over dark bg */}
               <rect
                 x={innerL} y={bodyY} width={innerW} height={folderSpacing}
                 fill={bg} stroke="none"
@@ -82,19 +91,20 @@ const BoxIllustration = () => {
         {/* Box front face */}
         <path
           d={`
-            M ${bx} ${by}
-            V ${by + bh - br}
-            Q ${bx} ${by + bh} ${bx + br} ${by + bh}
+            M ${bx} ${boxTopY}
+            V ${boxTopY + bh - br}
+            Q ${bx} ${boxTopY + bh} ${bx + br} ${boxTopY + bh}
             H ${bx + bw - br}
-            Q ${bx + bw} ${by + bh} ${bx + bw} ${by + bh - br}
-            V ${by}
+            Q ${bx + bw} ${boxTopY + bh} ${bx + bw} ${boxTopY + bh - br}
+            V ${boxTopY}
+            Z
           `}
           fill={bg} stroke={c} strokeWidth={sw}
         />
 
         {/* Handle */}
         <rect
-          x={bx + bw / 2 - 50} y={by + 18}
+          x={bx + bw / 2 - 50} y={boxTopY + 18}
           width={100} height={26} rx={13}
           fill={purple} stroke={c} strokeWidth={sw - 0.5}
         />
@@ -103,8 +113,8 @@ const BoxIllustration = () => {
         {Array.from({ length: lineCount }).map((_, i) => (
           <line
             key={i}
-            x1={bx + 12} y1={lineStart + i * lineGap}
-            x2={bx + bw - 12} y2={lineStart + i * lineGap}
+            x1={bx + 14} y1={lineStart + i * lineGap}
+            x2={bx + bw - 14} y2={lineStart + i * lineGap}
             stroke={c} strokeWidth={1} opacity={0.25}
           />
         ))}
