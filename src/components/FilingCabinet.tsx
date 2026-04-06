@@ -179,6 +179,9 @@ const FilingCabinet = () => {
                 width: w,
                 height: rowH,
                 zIndex: i + 1,
+                transform: isVisible ? "translateY(0)" : "translateY(40px)",
+                opacity: isVisible ? 1 : 0,
+                transition: "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease",
               }}
             >
               {/* Tab + Paper hover zone */}
