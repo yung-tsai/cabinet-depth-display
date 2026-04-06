@@ -82,22 +82,21 @@ const FilingCabinet = () => {
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
             >
-              {/* Paper that slides down from behind the folder on hover */}
+              {/* Paper that slides up behind the tab on hover */}
               <div
                 style={{
                   position: "absolute",
                   left: w * 0.1,
                   width: w * 0.8,
-                  top: rowH,
+                  top: 0,
                   height: 55,
                   backgroundColor: "#fff",
-                  borderRadius: "0 0 3px 3px",
-                  boxShadow: isHovered ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
+                  borderRadius: "3px 3px 0 0",
+                  boxShadow: isHovered ? "0 -2px 8px rgba(0,0,0,0.08)" : "none",
                   transition: "transform 0.3s ease, opacity 0.3s ease",
-                  transform: isHovered ? "translateY(0)" : "translateY(-55px)",
+                  transform: isHovered ? "translateY(-50px)" : "translateY(0)",
                   opacity: isHovered ? 1 : 0,
                   zIndex: -1,
-                  overflow: "hidden",
                 }}
               />
 
