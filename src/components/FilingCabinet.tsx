@@ -73,7 +73,7 @@ const FilingCabinet = () => {
                 backgroundColor: "#fff",
                 borderRadius: "3px 3px 0 0",
                 boxShadow: "0 -2px 8px rgba(0,0,0,0.08)",
-                zIndex: i, // behind hovered folder (i+1) and all below, in front of above
+                zIndex: 0, // behind all folder rows so only visible above topmost folder
                 transition: "top 0.3s ease, opacity 0.3s ease, left 0.3s ease, width 0.3s ease",
                 pointerEvents: "none",
               }}
