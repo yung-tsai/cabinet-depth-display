@@ -145,7 +145,7 @@ const FilingCabinet = () => {
                 color: f.isSection ? "#fff" : "#555",
                 fontWeight: f.isSection ? 500 : 400,
                 letterSpacing: "0.02em",
-                zIndex: 200 + i,
+                zIndex: 300 + i,
               }}
             >
               <span>{f.label}</span>
