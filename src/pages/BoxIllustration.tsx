@@ -23,11 +23,14 @@ const BoxIllustration = () => {
 
   const folders = [
     { tabX: 20, tabW: 120 },
-    { tabX: 150, tabW: 130 },
+    { tabX: 100, tabW: 130 },
     { tabX: 50, tabW: 140 },
-    { tabX: 200, tabW: 110 },
-    { tabX: 100, tabW: 120 },
-  ];
+    { tabX: 140, tabW: 110 },
+    { tabX: 70, tabW: 120 },
+  ].map((f, i) => {
+    const w = maxW - (folderCount - 1 - i) * narrowStep; // back folders narrower
+    return { ...f, folderW: w };
+  });
 
   // Lines on box front
   const lineCount = 7;
