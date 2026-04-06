@@ -80,13 +80,13 @@ const FilingCabinet = () => {
                 transition: "transform 0.3s ease, opacity 0.3s ease",
                 transform: isHovered ? "translateY(-45px)" : "translateY(0)",
                 opacity: isHovered ? 1 : 0,
-                zIndex: 1,
+                zIndex: 100 + i * 2 + 1,
               }}
             />
           );
         })}
 
-        {/* Layer 2: Folder bodies (middle z-index) */}
+        {/* Layer 2: Folder bodies */}
         {folders.map((_, i) => {
           const w = getW(i);
           const offsetX = getOffsetX(i);
@@ -106,7 +106,7 @@ const FilingCabinet = () => {
                 borderLeft: "1px solid #d0cfcc",
                 borderRight: "1px solid #d0cfcc",
                 boxShadow: "0 -1px 0 rgba(255,255,255,0.4)",
-                zIndex: 100 + i,
+                zIndex: 100 + i * 2,
               }}
             />
           );
@@ -145,7 +145,7 @@ const FilingCabinet = () => {
                 color: f.isSection ? "#fff" : "#555",
                 fontWeight: f.isSection ? 500 : 400,
                 letterSpacing: "0.02em",
-                zIndex: 200 + i,
+                zIndex: 300 + i,
               }}
             >
               <span>{f.label}</span>
