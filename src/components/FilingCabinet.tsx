@@ -111,6 +111,8 @@ const FilingCabinet = () => {
   const minW = 330;
   const maxW = 510;
   const rowH = 22;
+  const paperHeight = 60;
+  const paperWidthRatio = 0.8;
 
   const isExpanded = expandedIdx !== null;
 
@@ -161,13 +163,20 @@ const FilingCabinet = () => {
           const offsetX = (maxW - w) / 2;
           const top = i * rowH;
 
-          const positions: Array<"left" | "center" | "right"> = ["left", "center", "right"];
+          const positions = ["left", "center", "right"] as const;
           const tabPos = positions[i % 3];
           const tabWidth = f.isSection ? 120 : 100;
+          const paperWidth = w * paperWidthRatio;
+          const paperLeft = (w - paperWidth) / 2;
           let tabLeft: number;
           if (tabPos === "left") tabLeft = 14;
           else if (tabPos === "right") tabLeft = w - tabWidth - 14;
           else tabLeft = (w - tabWidth) / 2;
+
+          const hoverZoneLeft = Math.min(tabLeft, paperLeft);
+          const hoverZoneWidth = Math.max(tabLeft + tabWidth, paperLeft + paperWidth) - hoverZoneLeft;
+          const interactionLeft = isHovered ? hoverZoneLeft : tabLeft;
+          const interactionWidth = isHovered ? hoverZoneWidth : tabWidth;
 
           return (
             <div
@@ -190,14 +199,14 @@ const FilingCabinet = () => {
                 onMouseLeave={() => !isExpanded && setHoveredIdx(null)}
                 style={{
                   position: "absolute",
-                  left: tabLeft,
-                  top: -14 - (isHovered ? 60 : 0),
-                  width: tabWidth,
-                  height: rowH + 14 + (isHovered ? 60 : 0),
+                  left: interactionLeft,
+                  top: -14 - (isHovered ? paperHeight : 0),
+                  width: interactionWidth,
+                  height: rowH + 14 + (isHovered ? paperHeight : 0),
                   zIndex: 3,
                 }}
               >
-                {/* Paper — slides up behind the tab */}
+                {/* Paper — slides up centered between folders */}
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
@@ -205,15 +214,15 @@ const FilingCabinet = () => {
                   }}
                   style={{
                     position: "absolute",
-                    left: -(w * 0.8 - tabWidth) / 2,
+                    left: paperLeft - interactionLeft,
                     bottom: rowH,
-                    width: w * 0.8,
-                    height: 60,
+                    width: paperWidth,
+                    height: paperHeight,
                     backgroundColor: "#fff",
                     borderRadius: "3px 3px 0 0",
                     boxShadow: isHovered ? "0 -2px 8px rgba(0,0,0,0.08)" : "none",
                     transition: "transform 0.3s ease, opacity 0.3s ease",
-                    transform: isHovered ? "translateY(0)" : "translateY(60px)",
+                    transform: isHovered ? "translateY(0)" : `translateY(${paperHeight}px)`,
                     opacity: isHovered ? 1 : 0,
                     cursor: isHovered ? "pointer" : "default",
                     pointerEvents: isHovered ? "auto" : "none",
@@ -224,7 +233,7 @@ const FilingCabinet = () => {
                 <div
                   style={{
                     position: "absolute",
-                    left: 0,
+                    left: tabLeft - interactionLeft,
                     bottom: 0,
                     width: tabWidth,
                     height: rowH + 14,
