@@ -108,7 +108,6 @@ const FilingCabinet = () => {
     setHoveredIdx(null);
   }, []);
 
-  const total = folders.length;
   const minW = 330;
   const maxW = 510;
   const rowH = 22;
