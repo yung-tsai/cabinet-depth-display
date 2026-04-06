@@ -41,13 +41,39 @@ const folders: FolderData[] = [
 const FilingCabinet = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const [visibleFolders, setVisibleFolders] = useState<Set<number>>(new Set());
   const [reEntering, setReEntering] = useState(false);
 
+  const total = folders.length;
+  const staggerDelay = 15; // ms between each folder
+
+  const cascadeIn = useCallback(() => {
+    // Bottom to top: last folder first
+    for (let i = 0; i < total; i++) {
+      const folderIdx = total - 1 - i;
+      setTimeout(() => {
+        setVisibleFolders((prev) => new Set(prev).add(folderIdx));
+      }, i * staggerDelay);
+    }
+  }, [total]);
+
+  const cascadeOut = useCallback(() => {
+    // Top to bottom: first folder disappears first
+    for (let i = 0; i < total; i++) {
+      setTimeout(() => {
+        setVisibleFolders((prev) => {
+          const next = new Set(prev);
+          next.delete(i);
+          return next;
+        });
+      }, i * staggerDelay);
+    }
+  }, [total]);
+
   useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 100);
+    const timer = setTimeout(() => cascadeIn(), 100);
     return () => clearTimeout(timer);
-  }, []);
+  }, [cascadeIn]);
 
   // Close on Esc
   useEffect(() => {
