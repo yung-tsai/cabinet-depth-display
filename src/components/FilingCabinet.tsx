@@ -109,21 +109,22 @@ const FilingCabinet = () => {
                 <span>{f.label}</span>
               </div>
 
-              {/* Paper that slides up between tab and folder above */}
+              {/* Paper that slides up — bottom flush with folder body top */}
               <div
                 style={{
                   position: "absolute",
                   left: w * 0.1,
                   width: w * 0.8,
-                  top: 0,
-                  height: 55,
+                  bottom: rowH,
+                  height: 60,
                   backgroundColor: "#fff",
                   borderRadius: "3px 3px 0 0",
                   boxShadow: isHovered ? "0 -2px 8px rgba(0,0,0,0.08)" : "none",
                   transition: "transform 0.3s ease, opacity 0.3s ease",
-                  transform: isHovered ? "translateY(-50px)" : "translateY(0)",
+                  transform: isHovered ? "translateY(0)" : `translateY(${60}px)`,
                   opacity: isHovered ? 1 : 0,
                   zIndex: 1,
+                  overflow: "hidden",
                 }}
               />
 
