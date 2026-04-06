@@ -140,7 +140,7 @@ const FilingCabinet = () => {
                   borderLeft: "1px solid #d0cfcc",
                   borderRight: "1px solid #d0cfcc",
                   boxShadow: "0 -1px 0 rgba(255,255,255,0.4)",
-                  zIndex: 3,
+                  zIndex: 2,
                 }}
               />
             </div>
