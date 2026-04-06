@@ -76,47 +76,13 @@ const FilingCabinet = () => {
                 left: offsetX,
                 width: w,
                 height: rowH,
-                zIndex: isHovered ? 200 : i + 1,
+                zIndex: i + 1,
                 cursor: "pointer",
               }}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
             >
-              {/* Paper that slides up behind the tab on hover */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: w * 0.1,
-                  width: w * 0.8,
-                  top: 0,
-                  height: 55,
-                  backgroundColor: "#fff",
-                  borderRadius: "3px 3px 0 0",
-                  boxShadow: isHovered ? "0 -2px 8px rgba(0,0,0,0.08)" : "none",
-                  transition: "transform 0.3s ease, opacity 0.3s ease",
-                  transform: isHovered ? "translateY(-50px)" : "translateY(0)",
-                  opacity: isHovered ? 1 : 0,
-                  zIndex: -1,
-                }}
-              />
-
-              {/* Folder body - the visible edge/lip */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  height: rowH,
-                  backgroundColor: "#f3f2ef",
-                  borderTop: "1px solid #d0cfcc",
-                  borderLeft: "1px solid #d0cfcc",
-                  borderRight: "1px solid #d0cfcc",
-                  boxShadow: "0 -1px 0 rgba(255,255,255,0.4)",
-                }}
-              />
-
-              {/* Tab that sticks up */}
+              {/* Tab that sticks up (behind paper) */}
               <div
                 style={{
                   position: "absolute",
@@ -136,10 +102,46 @@ const FilingCabinet = () => {
                   color: f.isSection ? "#fff" : "#555",
                   fontWeight: f.isSection ? 500 : 400,
                   letterSpacing: "0.02em",
+                  zIndex: 1,
                 }}
               >
                 <span>{f.label}</span>
               </div>
+
+              {/* Paper that slides up between tab and folder above */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: w * 0.1,
+                  width: w * 0.8,
+                  top: 0,
+                  height: 55,
+                  backgroundColor: "#fff",
+                  borderRadius: "3px 3px 0 0",
+                  boxShadow: isHovered ? "0 -2px 8px rgba(0,0,0,0.08)" : "none",
+                  transition: "transform 0.3s ease, opacity 0.3s ease",
+                  transform: isHovered ? "translateY(-50px)" : "translateY(0)",
+                  opacity: isHovered ? 1 : 0,
+                  zIndex: 2,
+                }}
+              />
+
+              {/* Folder body - the visible edge/lip */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: rowH,
+                  backgroundColor: "#f3f2ef",
+                  borderTop: "1px solid #d0cfcc",
+                  borderLeft: "1px solid #d0cfcc",
+                  borderRight: "1px solid #d0cfcc",
+                  boxShadow: "0 -1px 0 rgba(255,255,255,0.4)",
+                  zIndex: 3,
+                }}
+              />
             </div>
           );
         })}
