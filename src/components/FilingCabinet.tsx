@@ -148,14 +148,15 @@ const FilingCabinet = () => {
           width: maxW,
           height: total * rowH + 20,
           marginTop: 30,
-          transform: mounted && !isExpanded ? "translateY(0)" : "translateY(100vh)",
-          opacity: mounted && !isExpanded ? 1 : 0,
-          transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease",
+          opacity: isExpanded ? 0 : 1,
+          transition: "opacity 0.3s ease",
+          pointerEvents: isExpanded ? "none" : "auto",
         }}
       >
         {folders.map((f, i) => {
           const w = minW + (maxW - minW) * (i / (total - 1));
           const isHovered = hoveredIdx === i;
+          const isVisible = visibleFolders.has(i);
 
           const offsetX = (maxW - w) / 2;
           const top = i * rowH;
