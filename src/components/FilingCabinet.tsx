@@ -57,10 +57,12 @@ const FilingCabinet = () => {
           const i = hoveredIdx;
           const w = minW + (maxW - minW) * (i / (total - 1));
           const offsetX = (maxW - w) / 2;
-          const paperTop = i * rowH;
+          const paperBottom = i * rowH; // bottom flush with hovered folder's body top
           const paperW = w * 0.8;
           const paperLeft = offsetX + w * 0.1;
-          const paperHeight = 70;
+          // Paper extends from hovered folder body top, upward past the cabinet
+          const paperTop = -80; // extend above the cabinet
+          const paperHeight = paperBottom - paperTop;
 
           return (
             <div
@@ -68,13 +70,13 @@ const FilingCabinet = () => {
                 position: "absolute",
                 left: paperLeft,
                 width: paperW,
-                top: paperTop - paperHeight,
+                top: paperTop,
                 height: paperHeight,
                 backgroundColor: "#fff",
                 borderRadius: "3px 3px 0 0",
-                boxShadow: "0 -2px 8px rgba(0,0,0,0.08)",
-                zIndex: 0, // behind all folder rows so only visible above topmost folder
-                transition: "top 0.3s ease, opacity 0.3s ease, left 0.3s ease, width 0.3s ease",
+                boxShadow: "0 -4px 12px rgba(0,0,0,0.06)",
+                zIndex: 0, // behind all folder rows
+                transition: "top 0.3s ease, height 0.3s ease, left 0.3s ease, width 0.3s ease",
                 pointerEvents: "none",
               }}
             />
