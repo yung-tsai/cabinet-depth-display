@@ -77,7 +77,7 @@ const FilingCabinet = () => {
                 top,
                 left: offsetX,
                 width: w,
-                height: rowH + 2,
+                height: rowH,
                 zIndex: isHovered ? 200 : i + 1,
                 transition: "transform 0.2s ease, filter 0.25s ease, opacity 0.25s ease",
                 transform: isHovered ? "translateY(-6px)" : "none",
@@ -183,18 +183,6 @@ const FilingCabinet = () => {
         />
       </div>
 
-      {/* Label */}
-      <div
-        className="mt-6 px-5 py-1.5 text-sm font-medium rounded"
-        style={{
-          backgroundColor: "#f7ef8a",
-          color: "#5a4e1a",
-          border: "1px solid #d4c94e",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-        }}
-      >
-        sam's secret files
-      </div>
     </div>
   );
 };
