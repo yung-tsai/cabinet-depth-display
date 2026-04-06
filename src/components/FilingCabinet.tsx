@@ -113,7 +113,7 @@ const FilingCabinet = () => {
                 style={{
                   position: "absolute",
                   left: tabLeft,
-                  top: 0,
+                  top: -8,
                   width: tabWidth,
                   height: rowH + 8,
                   borderRadius: "6px 6px 0 0",
