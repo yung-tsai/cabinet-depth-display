@@ -86,6 +86,24 @@ const FilingCabinet = () => {
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
             >
+              {/* Paper that slides up on hover */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: 20,
+                  right: 20,
+                  bottom: 4,
+                  height: 55,
+                  backgroundColor: "#fff",
+                  borderRadius: "3px 3px 0 0",
+                  boxShadow: "0 -2px 8px rgba(0,0,0,0.08)",
+                  transition: "transform 0.3s ease, opacity 0.3s ease",
+                  transform: isHovered ? "translateY(-50px)" : "translateY(0)",
+                  opacity: isHovered ? 1 : 0,
+                  zIndex: -1,
+                }}
+              />
+
               {/* Folder body - the visible edge/lip */}
               <div
                 style={{
