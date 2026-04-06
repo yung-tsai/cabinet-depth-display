@@ -63,10 +63,12 @@ const FilingCabinet = () => {
           const offsetX = (maxW - w) / 2;
           const top = i * rowH;
 
+          const positions: Array<"left" | "center" | "right"> = ["left", "center", "right"];
+          const tabPos = positions[i % 3];
           const tabWidth = f.isSection ? 120 : 100;
           let tabLeft: number;
-          if (f.tabPosition === "left") tabLeft = 14;
-          else if (f.tabPosition === "right") tabLeft = w - tabWidth - 14;
+          if (tabPos === "left") tabLeft = 14;
+          else if (tabPos === "right") tabLeft = w - tabWidth - 14;
           else tabLeft = (w - tabWidth) / 2;
 
           return (
