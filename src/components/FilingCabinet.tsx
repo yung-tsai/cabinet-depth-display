@@ -126,41 +126,8 @@ const FilingCabinet = () => {
                   letterSpacing: "0.02em",
                 }}
               >
-                {f.isSection ? (
-                  <>
-                    <span>{f.sectionLetter}</span>
-                    <span style={{ opacity: 0.55, fontSize: "10px" }}>{f.sectionCount}</span>
-                  </>
-                ) : (
-                  <>
-                    <span style={{ fontWeight: 600, color: "#333" }}>{f.number}</span>
-                    <span>{f.label}</span>
-                  </>
-                )}
+                <span>{f.label}</span>
               </div>
-
-              {/* On-body label for section folders */}
-              {f.isSection && (
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: 4,
-                    fontSize: "10px",
-                    color: "#999",
-                    display: "flex",
-                    gap: 5,
-                    zIndex: 2,
-                    ...(tabPos === "left"
-                      ? { left: tabWidth + 22 }
-                      : tabPos === "center"
-                      ? { left: 14 }
-                      : { right: tabWidth + 22 }),
-                  }}
-                >
-                  <span style={{ fontWeight: 500, color: "#777" }}>{f.number}</span>
-                  <span>{f.label}</span>
-                </div>
-              )}
             </div>
           );
         })}
