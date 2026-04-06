@@ -296,20 +296,36 @@ const FilingCabinet = () => {
           );
         })}
 
-        {/* Bottom edge */}
+        </div>
+
+        {/* Front panel */}
         <div
           style={{
             position: "absolute",
             bottom: 0,
             left: 0,
             right: 0,
-            height: 8,
-            backgroundColor: "#eeedea",
-            borderRadius: "0 0 4px 4px",
-            border: "1px solid #ccc",
-            borderTop: "none",
+            height: 50,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-        />
+        >
+          {/* Label */}
+          <div
+            style={{
+              padding: "4px 16px",
+              backgroundColor: "#f5f4f0",
+              border: "1px solid #c5c4c1",
+              borderRadius: 3,
+              fontSize: 11,
+              color: "#555",
+              letterSpacing: "0.02em",
+            }}
+          >
+            my files
+          </div>
+        </div>
       </div>
 
       <style>{`
