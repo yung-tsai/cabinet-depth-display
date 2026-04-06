@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 interface FolderData {
   label: string;
@@ -40,11 +40,47 @@ const folders: FolderData[] = [
 
 const FilingCabinet = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [reEntering, setReEntering] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 100);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Close on Esc
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && expandedIdx !== null) {
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [expandedIdx]);
+
+  const handleClose = useCallback(() => {
+    setExpandedIdx(null);
+    setReEntering(true);
+    // Trigger re-entrance slide-up
+    setMounted(false);
+    setTimeout(() => {
+      setMounted(true);
+      setTimeout(() => setReEntering(false), 800);
+    }, 50);
+  }, []);
+
+  // Click outside
+  const handleBackdropClick = useCallback(() => {
+    if (expandedIdx !== null) {
+      handleClose();
+    }
+  }, [expandedIdx, handleClose]);
+
+  const handlePaperClick = useCallback((idx: number) => {
+    setExpandedIdx(idx);
+    setHoveredIdx(null);
   }, []);
 
   const total = folders.length;
@@ -52,19 +88,44 @@ const FilingCabinet = () => {
   const maxW = 510;
   const rowH = 22;
 
+  const isExpanded = expandedIdx !== null;
+
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen"
       style={{ backgroundColor: "#f0efec", fontFamily: "system-ui, -apple-system, sans-serif" }}
+      onClick={handleBackdropClick}
     >
+      {/* Expanded paper overlay */}
+      {isExpanded && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: "rgba(0,0,0,0.1)" }}
+          onClick={handleBackdropClick}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: 400,
+              height: 500,
+              backgroundColor: "#fff",
+              borderRadius: 8,
+              boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
+              animation: "paperExpand 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+              padding: 32,
+            }}
+          />
+        </div>
+      )}
+
       <div
         className="relative"
         style={{
           width: maxW,
           height: total * rowH + 20,
           marginTop: 30,
-          transform: mounted ? "translateY(0)" : "translateY(100vh)",
-          opacity: mounted ? 1 : 0,
+          transform: mounted && !isExpanded ? "translateY(0)" : "translateY(100vh)",
+          opacity: mounted && !isExpanded ? 1 : 0,
           transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease",
         }}
       >
@@ -95,57 +156,71 @@ const FilingCabinet = () => {
                 zIndex: i + 1,
               }}
             >
-              {/* Tab — only this is hoverable */}
+              {/* Tab + Paper hover zone */}
               <div
+                onMouseEnter={() => !isExpanded && setHoveredIdx(i)}
+                onMouseLeave={() => !isExpanded && setHoveredIdx(null)}
                 style={{
                   position: "absolute",
                   left: tabLeft,
-                  top: -14,
+                  top: -14 - (isHovered ? 60 : 0),
                   width: tabWidth,
-                  height: rowH + 14,
-                  borderRadius: "6px 6px 0 0",
-                  backgroundColor: f.isSection ? "#1a1a1a" : "#e8e7e4",
-                  border: f.isSection ? "none" : "1px solid #c5c4c1",
-                  borderBottom: "none",
-                  display: "flex",
-                  alignItems: "flex-start",
-                  justifyContent: "center",
-                  paddingTop: 4,
-                  gap: 8,
-                  fontSize: "11px",
-                  color: f.isSection ? "#fff" : "#555",
-                  fontWeight: f.isSection ? 500 : 400,
-                  letterSpacing: "0.02em",
+                  height: rowH + 14 + (isHovered ? 60 : 0),
                   zIndex: 3,
-                  cursor: "pointer",
                 }}
-                onMouseEnter={() => setHoveredIdx(i)}
-                onMouseLeave={() => setHoveredIdx(null)}
               >
-                <span>{f.isSection ? `Section ${i + 1}` : `Folder ${i + 1}`}</span>
+                {/* Paper — slides up behind the tab */}
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (isHovered) handlePaperClick(i);
+                  }}
+                  style={{
+                    position: "absolute",
+                    left: -(w * 0.8 - tabWidth) / 2,
+                    bottom: rowH,
+                    width: w * 0.8,
+                    height: 60,
+                    backgroundColor: "#fff",
+                    borderRadius: "3px 3px 0 0",
+                    boxShadow: isHovered ? "0 -2px 8px rgba(0,0,0,0.08)" : "none",
+                    transition: "transform 0.3s ease, opacity 0.3s ease",
+                    transform: isHovered ? "translateY(0)" : "translateY(60px)",
+                    opacity: isHovered ? 1 : 0,
+                    cursor: isHovered ? "pointer" : "default",
+                    pointerEvents: isHovered ? "auto" : "none",
+                  }}
+                />
+
+                {/* Tab */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    width: tabWidth,
+                    height: rowH + 14,
+                    borderRadius: "6px 6px 0 0",
+                    backgroundColor: f.isSection ? "#1a1a1a" : "#e8e7e4",
+                    border: f.isSection ? "none" : "1px solid #c5c4c1",
+                    borderBottom: "none",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "center",
+                    paddingTop: 4,
+                    gap: 8,
+                    fontSize: "11px",
+                    color: f.isSection ? "#fff" : "#555",
+                    fontWeight: f.isSection ? 500 : 400,
+                    letterSpacing: "0.02em",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span>{f.isSection ? `Section ${i + 1}` : `Folder ${i + 1}`}</span>
+                </div>
               </div>
 
-              {/* Paper that slides up — bottom flush with folder body top */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: w * 0.1,
-                  width: w * 0.8,
-                  bottom: rowH,
-                  height: 60,
-                  backgroundColor: "#fff",
-                  borderRadius: "3px 3px 0 0",
-                  boxShadow: isHovered ? "0 -2px 8px rgba(0,0,0,0.08)" : "none",
-                  transition: "transform 0.3s ease, opacity 0.3s ease",
-                  transform: isHovered ? "translateY(0)" : `translateY(${60}px)`,
-                  opacity: isHovered ? 1 : 0,
-                  zIndex: 1,
-                  overflow: "hidden",
-                  pointerEvents: "none",
-                }}
-              />
-
-              {/* Folder body - the visible edge/lip */}
+              {/* Folder body */}
               <div
                 style={{
                   position: "absolute",
@@ -180,6 +255,19 @@ const FilingCabinet = () => {
           }}
         />
       </div>
+
+      <style>{`
+        @keyframes paperExpand {
+          0% {
+            transform: scale(0.3);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   );
 };
