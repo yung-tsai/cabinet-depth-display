@@ -85,24 +85,25 @@ const FilingCabinet = () => {
               {/* Tab that sticks up (behind paper) */}
               <div
                 style={{
-                  position: "absolute",
+                position: "absolute",
                   left: tabLeft,
-                  top: -8,
+                  top: -14,
                   width: tabWidth,
-                  height: rowH + 8,
+                  height: rowH + 14,
                   borderRadius: "6px 6px 0 0",
                   backgroundColor: f.isSection ? "#1a1a1a" : "#e8e7e4",
                   border: f.isSection ? "none" : "1px solid #c5c4c1",
                   borderBottom: "none",
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   justifyContent: "center",
+                  paddingTop: 4,
                   gap: 8,
                   fontSize: "11px",
                   color: f.isSection ? "#fff" : "#555",
                   fontWeight: f.isSection ? 500 : 400,
                   letterSpacing: "0.02em",
-                  zIndex: 1,
+                  zIndex: 3,
                 }}
               >
                 <span>{f.label}</span>
@@ -122,7 +123,7 @@ const FilingCabinet = () => {
                   transition: "transform 0.3s ease, opacity 0.3s ease",
                   transform: isHovered ? "translateY(-50px)" : "translateY(0)",
                   opacity: isHovered ? 1 : 0,
-                  zIndex: 2,
+                  zIndex: 1,
                 }}
               />
 
@@ -139,7 +140,7 @@ const FilingCabinet = () => {
                   borderLeft: "1px solid #d0cfcc",
                   borderRight: "1px solid #d0cfcc",
                   boxShadow: "0 -1px 0 rgba(255,255,255,0.4)",
-                  zIndex: 3,
+                  zIndex: 2,
                 }}
               />
             </div>
