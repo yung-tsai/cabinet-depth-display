@@ -46,125 +46,127 @@ const FilingCabinet = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const total = folders.length;
-  const minW = 320;
-  const maxW = 500;
-  const rowH = 26;
-  const tabH = 20;
-  const tabW = 110;
-  const smallTabW = 80;
+  const minW = 340;
+  const maxW = 510;
+  const folderH = 24;
+  const tabH = 18;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-cabinet-bg">
-      <div className="relative flex flex-col items-center" style={{ marginTop: tabH + 8 }}>
+    <div
+      className="flex flex-col items-center justify-center min-h-screen"
+      style={{ backgroundColor: "#f0efec" }}
+    >
+      <div className="relative" style={{ marginTop: 40 }}>
         {folders.map((f, i) => {
           const w = minW + (maxW - minW) * (i / (total - 1));
           const isHovered = hoveredIdx === i;
           const anyHovered = hoveredIdx !== null;
 
-          // Tab horizontal position
-          const getTabStyle = (): React.CSSProperties => {
-            const base: React.CSSProperties = {
-              position: "absolute",
-              top: -tabH + 2,
-              height: tabH,
-              borderRadius: "6px 6px 0 0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "11px",
-              letterSpacing: "0.02em",
-              whiteSpace: "nowrap",
-              cursor: "pointer",
-            };
+          // Calculate left offset to center all folders
+          const offsetX = (maxW - w) / 2;
 
-            if (f.isSection) {
-              base.width = tabW;
-              base.backgroundColor = "#1a1a1a";
-              base.color = "#fff";
-              base.fontWeight = 500;
-            } else {
-              base.width = smallTabW;
-              base.backgroundColor = "#e8e8e8";
-              base.border = "1px solid #ccc";
-              base.borderBottom = "none";
-              base.color = "#555";
-              base.fontWeight = 400;
-            }
+          // Tab positioning
+          const tabWidth = f.isSection ? 110 : 90;
+          let tabLeft: number;
+          if (f.tabPosition === "left") {
+            tabLeft = offsetX + 14;
+          } else if (f.tabPosition === "right") {
+            tabLeft = offsetX + w - tabWidth - 14;
+          } else {
+            tabLeft = offsetX + (w - tabWidth) / 2;
+          }
 
-            if (f.tabPosition === "left") {
-              base.left = 16;
-            } else if (f.tabPosition === "right") {
-              base.right = 16;
-            } else {
-              base.left = "50%";
-              base.transform = "translateX(-50%)";
-            }
-
-            return base;
-          };
+          const top = i * folderH;
 
           return (
             <div
               key={i}
-              className="relative transition-all duration-200 ease-out"
               style={{
+                position: "absolute",
+                top,
+                left: offsetX,
                 width: w,
-                height: rowH,
-                zIndex: isHovered ? 100 : total - i,
-                transform: isHovered ? "translateY(-6px) scale(1.01)" : "none",
-                filter: anyHovered && !isHovered ? "blur(1.2px)" : "none",
-                opacity: anyHovered && !isHovered ? 0.65 : 1,
+                height: folderH,
+                zIndex: isHovered ? 200 : total - i,
+                transition: "transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease",
+                transform: isHovered ? "translateY(-5px)" : "none",
+                filter: anyHovered && !isHovered ? "blur(1.5px)" : "none",
+                opacity: anyHovered && !isHovered ? 0.6 : 1,
+                cursor: "pointer",
               }}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
             >
-              {/* Folder body - the actual folder sheet */}
+              {/* Tab */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: tabLeft - offsetX,
+                  top: -tabH + 2,
+                  width: tabWidth,
+                  height: tabH,
+                  borderRadius: "5px 5px 0 0",
+                  backgroundColor: f.isSection ? "#1a1a1a" : "#eae9e6",
+                  border: f.isSection ? "none" : "1px solid #c8c7c4",
+                  borderBottom: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "10px",
+                  color: f.isSection ? "#fff" : "#555",
+                  fontWeight: f.isSection ? 500 : 400,
+                  letterSpacing: "0.03em",
+                  gap: "6px",
+                }}
+              >
+                {f.isSection ? (
+                  <>
+                    <span>{f.sectionLetter}</span>
+                    <span style={{ opacity: 0.6 }}>{f.sectionCount}</span>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ fontWeight: 600, color: "#333" }}>{f.number}</span>
+                    <span>{f.label}</span>
+                  </>
+                )}
+              </div>
+
+              {/* Folder body */}
               <div
                 style={{
                   position: "absolute",
                   inset: 0,
-                  backgroundColor: "#f5f5f3",
-                  borderLeft: "1px solid #d0d0d0",
-                  borderRight: "1px solid #d0d0d0",
-                  borderTop: "1px solid #d5d5d5",
+                  backgroundColor: "#f5f4f1",
+                  borderLeft: "1px solid #ccc",
+                  borderRight: "1px solid #ccc",
+                  borderTop: "1px solid #d4d3d0",
                   boxShadow: isHovered
-                    ? "0 -3px 10px rgba(0,0,0,0.12)"
-                    : "inset 0 1px 0 rgba(255,255,255,0.6)",
+                    ? "0 -4px 12px rgba(0,0,0,0.1)"
+                    : "none",
                 }}
               />
 
-              {/* Tab sticking up */}
-              <div style={getTabStyle()}>
-                {f.isSection ? (
-                  <span className="flex items-center gap-3">
-                    <span>{f.sectionLetter}</span>
-                    <span style={{ opacity: 0.6 }}>{f.sectionCount}</span>
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <span style={{ fontWeight: 500, color: "#333" }}>{f.number}</span>
-                    <span>{f.label}</span>
-                  </span>
-                )}
-              </div>
-
-              {/* Number and label on folder body for section folders */}
+              {/* Label text on body for section folders */}
               {f.isSection && (
                 <div
-                  className="absolute flex items-center gap-2"
                   style={{
-                    fontSize: "11px",
-                    color: "#888",
+                    position: "absolute",
                     top: "50%",
                     transform: "translateY(-50%)",
+                    fontSize: "10px",
+                    color: "#999",
+                    display: "flex",
+                    gap: "5px",
                     ...(f.tabPosition === "left"
-                      ? { left: tabW + 28 }
-                      : f.tabPosition === "right"
-                      ? { right: tabW + 28 }
-                      : { left: 20 }),
+                      ? { left: tabWidth + 24 }
+                      : f.tabPosition === "center"
+                      ? { left: 16 }
+                      : { right: tabWidth + 24 }),
+                    zIndex: 2,
                   }}
                 >
-                  <span style={{ fontWeight: 500, color: "#666" }}>{f.number}</span>
+                  <span style={{ fontWeight: 500, color: "#777" }}>{f.number}</span>
                   <span>{f.label}</span>
                 </div>
               )}
@@ -172,27 +174,33 @@ const FilingCabinet = () => {
           );
         })}
 
-        {/* Cabinet bottom */}
-        <div
-          style={{
-            width: maxW,
-            height: 10,
-            backgroundColor: "#f0f0ee",
-            borderRadius: "0 0 4px 4px",
-            border: "1px solid #d0d0d0",
-            borderTop: "none",
-          }}
-        />
+        {/* Container sizing */}
+        <div style={{ width: maxW, height: total * folderH + 10, position: "relative", pointerEvents: "none" }}>
+          {/* Bottom edge */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 10,
+              backgroundColor: "#eeedea",
+              borderRadius: "0 0 4px 4px",
+              border: "1px solid #ccc",
+              borderTop: "none",
+            }}
+          />
+        </div>
       </div>
 
-      {/* Label at bottom */}
+      {/* Label */}
       <div
-        className="mt-6 px-5 py-1.5 text-sm font-medium rounded"
+        className="mt-8 px-5 py-1.5 text-sm font-medium rounded"
         style={{
           backgroundColor: "#f7ef8a",
           color: "#5a4e1a",
           border: "1px solid #d4c94e",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
         }}
       >
         sam's secret files
