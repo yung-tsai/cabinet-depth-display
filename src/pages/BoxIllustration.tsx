@@ -1,170 +1,113 @@
 const BoxIllustration = () => {
-  const boxWidth = 420;
-  const boxHeight = 300;
-  const boxTop = 200;
-  const boxLeft = 50;
-  const cornerRadius = 8;
-  const strokeWidth = 3;
-  const lineColor = "#1a1a1a";
-  const fillColor = "#f0efec";
-  const handleColor = "#8b7fdb";
+  const sw = 2.5; // stroke width
+  const c = "#1a1a1a";
+  const bg = "#f0efec";
+  const purple = "#8b7fdb";
 
-  // Horizontal lines on box front
-  const lineCount = 6;
-  const lineStartY = boxTop + 50;
-  const lineSpacing = (boxHeight - 70) / lineCount;
+  // Box dimensions
+  const bx = 60, by = 220, bw = 400, bh = 260, br = 10;
 
-  // Folder definitions (from back to front)
+  // Folders (back to front, staggered tabs)
   const folders = [
-    { tabX: 80, tabW: 120, height: 60 },
-    { tabX: 160, tabW: 130, height: 50 },
-    { tabX: 100, tabW: 140, height: 40 },
-    { tabX: 200, tabW: 110, height: 30 },
-    { tabX: 130, tabW: 120, height: 20 },
+    { tabX: 30, tabW: 110 },
+    { tabX: 140, tabW: 120 },
+    { tabX: 60, tabW: 130 },
+    { tabX: 180, tabW: 100 },
+    { tabX: 90, tabW: 120 },
   ];
 
-  const innerLeft = boxLeft + 12;
-  const innerRight = boxLeft + boxWidth - 12;
-  const innerWidth = innerRight - innerLeft;
-  const folderBaseY = boxTop + 8;
+  const innerL = bx + 8;
+  const innerR = bx + bw - 8;
+  const innerW = innerR - innerL;
+  const folderSpacing = 22;
+  const tabH = 30;
+  const tabR = 10;
+
+  // Lines on box front
+  const lineCount = 7;
+  const lineStart = by + 55;
+  const lineEnd = by + bh - 20;
+  const lineGap = (lineEnd - lineStart) / (lineCount - 1);
 
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen"
-      style={{ backgroundColor: "#f0efec" }}
+      style={{ backgroundColor: bg }}
     >
-      <svg
-        width={boxWidth + 100}
-        height={boxTop + boxHeight + 40}
-        viewBox={`0 0 ${boxWidth + 100} ${boxTop + boxHeight + 40}`}
-      >
-        {/* Box back wall (visible above folders) */}
+      <svg width="520" height="520" viewBox="0 0 520 520">
+        {/* Back wall top edge */}
         <rect
-          x={boxLeft}
-          y={boxTop - 10}
-          width={boxWidth}
-          height={16}
-          rx={4}
-          fill={fillColor}
-          stroke={lineColor}
-          strokeWidth={strokeWidth}
+          x={bx} y={by - 14} width={bw} height={18}
+          rx={6} fill={bg} stroke={c} strokeWidth={sw}
         />
 
-        {/* Dark interior behind folders */}
+        {/* Dark interior */}
         <rect
-          x={boxLeft + 6}
-          y={boxTop - 2}
-          width={boxWidth - 12}
-          height={60}
-          fill={lineColor}
+          x={bx + 4} y={by - 2} width={bw - 8} height={folders.length * folderSpacing + tabH + 10}
+          fill={c}
         />
 
-        {/* Folders (back to front) */}
-        {folders.map((folder, i) => {
-          const tabHeight = 28;
-          const folderY = folderBaseY + i * 18;
-          const tabR = 8;
-
-          // Folder body (the flat part inside the box)
-          const bodyY = folderY + tabHeight - 4;
+        {/* Folders */}
+        {folders.map((f, i) => {
+          const bodyY = by + 6 + i * folderSpacing + tabH;
+          const tabTop = bodyY - tabH;
 
           return (
             <g key={i}>
               {/* Tab */}
               <path
                 d={`
-                  M ${innerLeft + folder.tabX} ${bodyY}
-                  L ${innerLeft + folder.tabX} ${folderY + tabR}
-                  Q ${innerLeft + folder.tabX} ${folderY} ${innerLeft + folder.tabX + tabR} ${folderY}
-                  L ${innerLeft + folder.tabX + folder.tabW - tabR} ${folderY}
-                  Q ${innerLeft + folder.tabX + folder.tabW} ${folderY} ${innerLeft + folder.tabX + folder.tabW} ${folderY + tabR}
-                  L ${innerLeft + folder.tabX + folder.tabW} ${bodyY}
+                  M ${innerL + f.tabX} ${bodyY}
+                  V ${tabTop + tabR}
+                  Q ${innerL + f.tabX} ${tabTop} ${innerL + f.tabX + tabR} ${tabTop}
+                  H ${innerL + f.tabX + f.tabW - tabR}
+                  Q ${innerL + f.tabX + f.tabW} ${tabTop} ${innerL + f.tabX + f.tabW} ${tabTop + tabR}
+                  V ${bodyY}
                 `}
-                fill={fillColor}
-                stroke={lineColor}
-                strokeWidth={strokeWidth - 0.5}
+                fill={bg} stroke={c} strokeWidth={sw - 0.5}
               />
-              {/* Folder body line */}
-              <line
-                x1={innerLeft}
-                y1={bodyY}
-                x2={innerRight}
-                y2={bodyY}
-                stroke={lineColor}
-                strokeWidth={strokeWidth - 0.5}
-              />
-              {/* Folder body fill (covers dark bg) */}
+              {/* Folder body */}
               <rect
-                x={innerLeft}
-                y={bodyY}
-                width={innerWidth}
-                height={4}
-                fill={fillColor}
-                stroke="none"
+                x={innerL} y={bodyY} width={innerW} height={folderSpacing}
+                fill={bg} stroke="none"
+              />
+              <line
+                x1={innerL} y1={bodyY} x2={innerR} y2={bodyY}
+                stroke={c} strokeWidth={sw - 0.5}
               />
             </g>
           );
         })}
 
-        {/* Box front */}
+        {/* Box front face */}
         <path
           d={`
-            M ${boxLeft} ${boxTop}
-            L ${boxLeft} ${boxTop + boxHeight - cornerRadius}
-            Q ${boxLeft} ${boxTop + boxHeight} ${boxLeft + cornerRadius} ${boxTop + boxHeight}
-            L ${boxLeft + boxWidth - cornerRadius} ${boxTop + boxHeight}
-            Q ${boxLeft + boxWidth} ${boxTop + boxHeight} ${boxLeft + boxWidth} ${boxTop + boxHeight - cornerRadius}
-            L ${boxLeft + boxWidth} ${boxTop}
+            M ${bx} ${by}
+            V ${by + bh - br}
+            Q ${bx} ${by + bh} ${bx + br} ${by + bh}
+            H ${bx + bw - br}
+            Q ${bx + bw} ${by + bh} ${bx + bw} ${by + bh - br}
+            V ${by}
           `}
-          fill={fillColor}
-          stroke={lineColor}
-          strokeWidth={strokeWidth}
+          fill={bg} stroke={c} strokeWidth={sw}
         />
 
-        {/* Horizontal ruled lines on box front */}
+        {/* Handle */}
+        <rect
+          x={bx + bw / 2 - 50} y={by + 18}
+          width={100} height={26} rx={13}
+          fill={purple} stroke={c} strokeWidth={sw - 0.5}
+        />
+
+        {/* Ruled lines */}
         {Array.from({ length: lineCount }).map((_, i) => (
           <line
             key={i}
-            x1={boxLeft + 8}
-            y1={lineStartY + i * lineSpacing}
-            x2={boxLeft + boxWidth - 8}
-            y2={lineStartY + i * lineSpacing}
-            stroke={lineColor}
-            strokeWidth={1.2}
-            opacity={0.3}
+            x1={bx + 12} y1={lineStart + i * lineGap}
+            x2={bx + bw - 12} y2={lineStart + i * lineGap}
+            stroke={c} strokeWidth={1} opacity={0.25}
           />
         ))}
-
-        {/* Handle cutout */}
-        <rect
-          x={boxLeft + boxWidth / 2 - 45}
-          y={boxTop + 20}
-          width={90}
-          height={24}
-          rx={12}
-          fill={handleColor}
-          stroke={lineColor}
-          strokeWidth={strokeWidth - 0.5}
-        />
-
-        {/* Box left side edge */}
-        <line
-          x1={boxLeft}
-          y1={boxTop - 4}
-          x2={boxLeft}
-          y2={boxTop}
-          stroke={lineColor}
-          strokeWidth={strokeWidth}
-        />
-        {/* Box right side edge */}
-        <line
-          x1={boxLeft + boxWidth}
-          y1={boxTop - 4}
-          x2={boxLeft + boxWidth}
-          y2={boxTop}
-          stroke={lineColor}
-          strokeWidth={strokeWidth}
-        />
       </svg>
     </div>
   );
