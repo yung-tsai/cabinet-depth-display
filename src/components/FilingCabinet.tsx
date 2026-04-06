@@ -145,14 +145,42 @@ const FilingCabinet = () => {
       <div
         className="relative"
         style={{
-          width: maxW,
-          height: total * rowH + 20,
+          width: maxW + 20,
+          height: total * rowH + 80,
           marginTop: 30,
           opacity: isExpanded ? 0 : 1,
           transition: "opacity 0.3s ease",
           pointerEvents: isExpanded ? "none" : "auto",
         }}
       >
+        {/* Cabinet walls - U shape */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            borderLeft: "1px solid #c5c4c1",
+            borderRight: "1px solid #c5c4c1",
+            borderBottom: "1px solid #c5c4c1",
+            borderRadius: "0 0 4px 4px",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        {/* Folders container - offset inside walls */}
+        <div
+          className="relative"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 10,
+            right: 10,
+            height: total * rowH + 20,
+          }}
+        >
         {folders.map((f, i) => {
           const w = minW + (maxW - minW) * (i / (total - 1));
           const isHovered = hoveredIdx === i;
@@ -268,20 +296,36 @@ const FilingCabinet = () => {
           );
         })}
 
-        {/* Bottom edge */}
+        </div>
+
+        {/* Front panel */}
         <div
           style={{
             position: "absolute",
             bottom: 0,
             left: 0,
             right: 0,
-            height: 8,
-            backgroundColor: "#eeedea",
-            borderRadius: "0 0 4px 4px",
-            border: "1px solid #ccc",
-            borderTop: "none",
+            height: 50,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-        />
+        >
+          {/* Label */}
+          <div
+            style={{
+              padding: "4px 16px",
+              backgroundColor: "#f5f4f0",
+              border: "1px solid #c5c4c1",
+              borderRadius: 3,
+              fontSize: 11,
+              color: "#555",
+              letterSpacing: "0.02em",
+            }}
+          >
+            my files
+          </div>
+        </div>
       </div>
 
       <style>{`
