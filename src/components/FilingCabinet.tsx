@@ -63,10 +63,12 @@ const FilingCabinet = () => {
           const offsetX = (maxW - w) / 2;
           const top = i * rowH;
 
+          const positions: Array<"left" | "center" | "right"> = ["left", "center", "right"];
+          const tabPos = positions[i % 3];
           const tabWidth = f.isSection ? 120 : 100;
           let tabLeft: number;
-          if (f.tabPosition === "left") tabLeft = 14;
-          else if (f.tabPosition === "right") tabLeft = w - tabWidth - 14;
+          if (tabPos === "left") tabLeft = 14;
+          else if (tabPos === "right") tabLeft = w - tabWidth - 14;
           else tabLeft = (w - tabWidth) / 2;
 
           return (
@@ -111,7 +113,7 @@ const FilingCabinet = () => {
                 style={{
                   position: "absolute",
                   left: tabLeft,
-                  top: 0,
+                  top: -8,
                   width: tabWidth,
                   height: rowH + 8,
                   borderRadius: "6px 6px 0 0",
@@ -152,9 +154,9 @@ const FilingCabinet = () => {
                     display: "flex",
                     gap: 5,
                     zIndex: 2,
-                    ...(f.tabPosition === "left"
+                    ...(tabPos === "left"
                       ? { left: tabWidth + 22 }
-                      : f.tabPosition === "center"
+                      : tabPos === "center"
                       ? { left: 14 }
                       : { right: tabWidth + 22 }),
                   }}
