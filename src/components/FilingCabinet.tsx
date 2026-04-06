@@ -154,9 +154,9 @@ const FilingCabinet = () => {
                     display: "flex",
                     gap: 5,
                     zIndex: 2,
-                    ...(f.tabPosition === "left"
+                    ...(tabPos === "left"
                       ? { left: tabWidth + 22 }
-                      : f.tabPosition === "center"
+                      : tabPos === "center"
                       ? { left: 14 }
                       : { right: tabWidth + 22 }),
                   }}
