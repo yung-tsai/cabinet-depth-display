@@ -76,7 +76,7 @@ const FilingCabinet = () => {
                 left: offsetX,
                 width: w,
                 height: rowH,
-                zIndex: isHovered ? 200 : i + 1,
+                zIndex: i + 1,
                 cursor: "pointer",
               }}
               onMouseEnter={() => setHoveredIdx(i)}
