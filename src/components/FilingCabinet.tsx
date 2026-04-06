@@ -122,7 +122,7 @@ const FilingCabinet = () => {
                 onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}
               >
-                <span>{f.label}</span>
+                <span>{f.isSection ? `Section ${i + 1}` : `Folder ${i + 1}`}</span>
               </div>
 
               {/* Paper that slides up — bottom flush with folder body top */}
