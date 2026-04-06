@@ -113,7 +113,7 @@ const FilingCabinet = () => {
                   left: tabLeft,
                   top: 0,
                   width: tabWidth,
-                  height: rowH,
+                  height: rowH + 8,
                   borderRadius: "6px 6px 0 0",
                   backgroundColor: f.isSection ? "#1a1a1a" : "#e8e7e4",
                   border: f.isSection ? "none" : "1px solid #c5c4c1",
