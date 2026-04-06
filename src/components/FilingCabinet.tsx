@@ -77,7 +77,7 @@ const FilingCabinet = () => {
                 top,
                 left: offsetX,
                 width: w,
-                height: rowH + 2,
+                height: rowH,
                 zIndex: isHovered ? 200 : i + 1,
                 transition: "transform 0.2s ease, filter 0.25s ease, opacity 0.25s ease",
                 transform: isHovered ? "translateY(-6px)" : "none",
