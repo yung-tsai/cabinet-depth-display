@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface FolderData {
   label: string;
@@ -40,6 +40,12 @@ const folders: FolderData[] = [
 
 const FilingCabinet = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const total = folders.length;
   const minW = 330;
@@ -51,11 +57,21 @@ const FilingCabinet = () => {
       className="flex flex-col items-center justify-center min-h-screen"
       style={{ backgroundColor: "#f0efec", fontFamily: "system-ui, -apple-system, sans-serif" }}
     >
-      <div className="relative" style={{ width: maxW, height: total * rowH + 20, marginTop: 30 }}>
+      <div
+        className="relative"
+        style={{
+          width: maxW,
+          height: total * rowH + 20,
+          marginTop: 30,
+          transform: mounted ? "translateY(0)" : "translateY(100vh)",
+          opacity: mounted ? 1 : 0,
+          transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease",
+        }}
+      >
         {folders.map((f, i) => {
           const w = minW + (maxW - minW) * (i / (total - 1));
           const isHovered = hoveredIdx === i;
-          
+
           const offsetX = (maxW - w) / 2;
           const top = i * rowH;
 
@@ -77,15 +93,12 @@ const FilingCabinet = () => {
                 width: w,
                 height: rowH,
                 zIndex: i + 1,
-                cursor: "pointer",
               }}
-              onMouseEnter={() => setHoveredIdx(i)}
-              onMouseLeave={() => setHoveredIdx(null)}
             >
-              {/* Tab that sticks up (behind paper) */}
+              {/* Tab — only this is hoverable */}
               <div
                 style={{
-                position: "absolute",
+                  position: "absolute",
                   left: tabLeft,
                   top: -14,
                   width: tabWidth,
@@ -104,7 +117,10 @@ const FilingCabinet = () => {
                   fontWeight: f.isSection ? 500 : 400,
                   letterSpacing: "0.02em",
                   zIndex: 3,
+                  cursor: "pointer",
                 }}
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
               >
                 <span>{f.label}</span>
               </div>
@@ -125,6 +141,7 @@ const FilingCabinet = () => {
                   opacity: isHovered ? 1 : 0,
                   zIndex: 1,
                   overflow: "hidden",
+                  pointerEvents: "none",
                 }}
               />
 
@@ -163,7 +180,6 @@ const FilingCabinet = () => {
           }}
         />
       </div>
-
     </div>
   );
 };
