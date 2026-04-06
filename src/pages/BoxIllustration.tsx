@@ -12,8 +12,9 @@ const BoxIllustration = () => {
   const tabR = 10;
   const innerPad = 8;
   const innerL = bx + innerPad;
-  const innerR = bx + bw - innerPad;
-  const innerW = innerR - innerL;
+  // Each folder narrows toward the back (top). Front folder (i=4) is widest.
+  const maxW = bw - innerPad * 2;
+  const narrowStep = 28; // px narrower per step toward back
 
   // The folders stick out above the box top
   const foldersTopY = 40;
@@ -22,11 +23,14 @@ const BoxIllustration = () => {
 
   const folders = [
     { tabX: 20, tabW: 120 },
-    { tabX: 150, tabW: 130 },
+    { tabX: 100, tabW: 130 },
     { tabX: 50, tabW: 140 },
-    { tabX: 200, tabW: 110 },
-    { tabX: 100, tabW: 120 },
-  ];
+    { tabX: 140, tabW: 110 },
+    { tabX: 70, tabW: 120 },
+  ].map((f, i) => {
+    const w = maxW - (folderCount - 1 - i) * narrowStep; // back folders narrower
+    return { ...f, folderW: w };
+  });
 
   // Lines on box front
   const lineCount = 7;
@@ -49,10 +53,15 @@ const BoxIllustration = () => {
         <line x1={bx} y1={foldersTopY + tabH} x2={bx} y2={boxTopY} stroke={c} strokeWidth={sw} />
         <line x1={bx + bw} y1={foldersTopY + tabH} x2={bx + bw} y2={boxTopY} stroke={c} strokeWidth={sw} />
 
-        {/* Dark interior behind folders */}
-        <rect
-          x={bx + 1} y={foldersTopY + tabH - 2}
-          width={bw - 2} height={boxTopY - foldersTopY - tabH + 8}
+        {/* Dark interior - tapered shape following folder depth */}
+        <path
+          d={`
+            M ${innerL} ${foldersTopY + tabH - 2}
+            H ${innerL + folders[0].folderW}
+            L ${innerL + folders[folders.length - 1].folderW} ${boxTopY + 6}
+            H ${innerL}
+            Z
+          `}
           fill={c}
         />
 
@@ -60,6 +69,7 @@ const BoxIllustration = () => {
         {folders.map((f, i) => {
           const bodyY = foldersTopY + i * folderSpacing + tabH;
           const tabTop = bodyY - tabH;
+          const folderR = innerL + f.folderW;
 
           return (
             <g key={i}>
@@ -77,11 +87,11 @@ const BoxIllustration = () => {
               />
               {/* Folder body fills over dark bg */}
               <rect
-                x={innerL} y={bodyY} width={innerW} height={folderSpacing}
+                x={innerL} y={bodyY} width={f.folderW} height={folderSpacing}
                 fill={bg} stroke="none"
               />
               <line
-                x1={innerL} y1={bodyY} x2={innerR} y2={bodyY}
+                x1={innerL} y1={bodyY} x2={folderR} y2={bodyY}
                 stroke={c} strokeWidth={sw - 0.5}
               />
             </g>
