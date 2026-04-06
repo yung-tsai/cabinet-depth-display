@@ -183,18 +183,6 @@ const FilingCabinet = () => {
         />
       </div>
 
-      {/* Label */}
-      <div
-        className="mt-6 px-5 py-1.5 text-sm font-medium rounded"
-        style={{
-          backgroundColor: "#f7ef8a",
-          color: "#5a4e1a",
-          border: "1px solid #d4c94e",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-        }}
-      >
-        sam's secret files
-      </div>
     </div>
   );
 };
