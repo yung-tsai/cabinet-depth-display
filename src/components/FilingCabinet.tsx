@@ -123,7 +123,7 @@ const FilingCabinet = () => {
                   transition: "transform 0.3s ease, opacity 0.3s ease",
                   transform: isHovered ? "translateY(-50px)" : "translateY(0)",
                   opacity: isHovered ? 1 : 0,
-                  zIndex: 2,
+                  zIndex: 1,
                 }}
               />
 
