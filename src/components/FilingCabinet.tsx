@@ -55,7 +55,7 @@ const FilingCabinet = () => {
         {folders.map((f, i) => {
           const w = minW + (maxW - minW) * (i / (total - 1));
           const isHovered = hoveredIdx === i;
-          const anyHovered = hoveredIdx !== null;
+          
           const offsetX = (maxW - w) / 2;
           const top = i * rowH;
 
@@ -77,26 +77,22 @@ const FilingCabinet = () => {
                 width: w,
                 height: rowH,
                 zIndex: isHovered ? 200 : i + 1,
-                transition: "transform 0.2s ease, filter 0.25s ease, opacity 0.25s ease",
-                transform: isHovered ? "translateY(-6px)" : "none",
-                filter: anyHovered && !isHovered ? "blur(1.5px)" : "none",
-                opacity: anyHovered && !isHovered ? 0.55 : 1,
                 cursor: "pointer",
               }}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
             >
-              {/* Paper that slides up on hover */}
+              {/* Paper that slides up behind the tab on hover */}
               <div
                 style={{
                   position: "absolute",
-                  left: 20,
-                  right: 20,
+                  left: tabLeft + 4,
+                  width: tabWidth - 8,
                   bottom: 4,
                   height: 55,
                   backgroundColor: "#fff",
                   borderRadius: "3px 3px 0 0",
-                  boxShadow: "0 -2px 8px rgba(0,0,0,0.08)",
+                  boxShadow: isHovered ? "0 -2px 8px rgba(0,0,0,0.08)" : "none",
                   transition: "transform 0.3s ease, opacity 0.3s ease",
                   transform: isHovered ? "translateY(-50px)" : "translateY(0)",
                   opacity: isHovered ? 1 : 0,
@@ -116,9 +112,7 @@ const FilingCabinet = () => {
                   borderTop: "1px solid #d0cfcc",
                   borderLeft: "1px solid #d0cfcc",
                   borderRight: "1px solid #d0cfcc",
-                  boxShadow: isHovered
-                    ? "0 -3px 10px rgba(0,0,0,0.12)"
-                    : "0 -1px 0 rgba(255,255,255,0.4)",
+                  boxShadow: "0 -1px 0 rgba(255,255,255,0.4)",
                 }}
               />
 
