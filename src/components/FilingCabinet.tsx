@@ -89,13 +89,12 @@ const FilingCabinet = () => {
   const handleClose = useCallback(() => {
     setExpandedIdx(null);
     setReEntering(true);
-    // Trigger re-entrance slide-up
-    setMounted(false);
+    cascadeOut();
     setTimeout(() => {
-      setMounted(true);
-      setTimeout(() => setReEntering(false), 800);
-    }, 50);
-  }, []);
+      cascadeIn();
+      setTimeout(() => setReEntering(false), total * staggerDelay + 300);
+    }, total * staggerDelay + 50);
+  }, [cascadeIn, cascadeOut, total, staggerDelay]);
 
   // Click outside
   const handleBackdropClick = useCallback(() => {
