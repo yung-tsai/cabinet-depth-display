@@ -1,45 +1,41 @@
 import { useState } from "react";
 
 interface FolderData {
-  number: number;
   label: string;
-  tabPosition: "left" | "center" | "right";
   isSection?: boolean;
-  sectionLetter?: string;
-  sectionCount?: string;
 }
 
 const folders: FolderData[] = [
-  { number: 94, label: "oil lamp", tabPosition: "center" },
-  { number: 95, label: "oats", tabPosition: "right" },
-  { number: 96, label: "pants", tabPosition: "center", isSection: true, sectionLetter: "O", sectionCount: "010" },
-  { number: 97, label: "plane", tabPosition: "right" },
-  { number: 98, label: "plant 003", tabPosition: "center" },
-  { number: 99, label: "pomelo", tabPosition: "right" },
-  { number: 100, label: "phisher", tabPosition: "center" },
-  { number: 101, label: "palo alto", tabPosition: "right" },
-  { number: 102, label: "pencile", tabPosition: "center" },
-  { number: 103, label: "photos", tabPosition: "right" },
-  { number: 104, label: "quiet", tabPosition: "left", isSection: true, sectionLetter: "P", sectionCount: "012" },
-  { number: 105, label: "queen", tabPosition: "right" },
-  { number: 106, label: "questions", tabPosition: "center" },
-  { number: 107, label: "quizz", tabPosition: "right" },
-  { number: 108, label: "quit", tabPosition: "center" },
-  { number: 109, label: "raccoon", tabPosition: "center", isSection: true, sectionLetter: "Q", sectionCount: "005" },
-  { number: 111, label: "rizz", tabPosition: "right" },
-  { number: 112, label: "rum", tabPosition: "left" },
-  { number: 113, label: "generic guy", tabPosition: "right" },
-  { number: 114, label: "rain", tabPosition: "center" },
-  { number: 115, label: "rug", tabPosition: "right" },
-  { number: 116, label: "ruby", tabPosition: "center", isSection: true, sectionLetter: "R", sectionCount: "002" },
-  { number: 117, label: "sider", tabPosition: "right" },
-  { number: 118, label: "sony", tabPosition: "center" },
-  { number: 119, label: "sun", tabPosition: "right" },
-  { number: 120, label: "seller", tabPosition: "center" },
-  { number: 121, label: "sims", tabPosition: "right" },
-  { number: 122, label: "slides", tabPosition: "center" },
-  { number: 123, label: "simpsons", tabPosition: "right" },
-  { number: 124, label: "sir", tabPosition: "center", isSection: true, sectionLetter: "S", sectionCount: "002" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Section", isSection: true },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Section", isSection: true },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Section", isSection: true },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Section", isSection: true },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Folder" },
+  { label: "Section", isSection: true },
 ];
 
 const FilingCabinet = () => {
@@ -130,41 +126,8 @@ const FilingCabinet = () => {
                   letterSpacing: "0.02em",
                 }}
               >
-                {f.isSection ? (
-                  <>
-                    <span>{f.sectionLetter}</span>
-                    <span style={{ opacity: 0.55, fontSize: "10px" }}>{f.sectionCount}</span>
-                  </>
-                ) : (
-                  <>
-                    <span style={{ fontWeight: 600, color: "#333" }}>{f.number}</span>
-                    <span>{f.label}</span>
-                  </>
-                )}
+                <span>{f.label}</span>
               </div>
-
-              {/* On-body label for section folders */}
-              {f.isSection && (
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: 4,
-                    fontSize: "10px",
-                    color: "#999",
-                    display: "flex",
-                    gap: 5,
-                    zIndex: 2,
-                    ...(tabPos === "left"
-                      ? { left: tabWidth + 22 }
-                      : tabPos === "center"
-                      ? { left: 14 }
-                      : { right: tabWidth + 22 }),
-                  }}
-                >
-                  <span style={{ fontWeight: 500, color: "#777" }}>{f.number}</span>
-                  <span>{f.label}</span>
-                </div>
-              )}
             </div>
           );
         })}
