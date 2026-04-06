@@ -52,39 +52,9 @@ const FilingCabinet = () => {
       style={{ backgroundColor: "#f0efec", fontFamily: "system-ui, -apple-system, sans-serif" }}
     >
       <div className="relative" style={{ width: maxW, height: total * rowH + 20, marginTop: 30 }}>
-        {/* Paper element — rendered separately so z-index works across rows */}
-        {hoveredIdx !== null && (() => {
-          const i = hoveredIdx;
-          const w = minW + (maxW - minW) * (i / (total - 1));
-          const offsetX = (maxW - w) / 2;
-          const paperBottom = i * rowH; // bottom flush with hovered folder's body top
-          const paperW = w * 0.8;
-          const paperLeft = offsetX + w * 0.1;
-          // Paper extends from hovered folder body top, upward past the cabinet
-          const paperTop = -80; // extend above the cabinet
-          const paperHeight = paperBottom - paperTop;
-
-          return (
-            <div
-              style={{
-                position: "absolute",
-                left: paperLeft,
-                width: paperW,
-                top: paperTop,
-                height: paperHeight,
-                backgroundColor: "#fff",
-                borderRadius: "3px 3px 0 0",
-                boxShadow: "0 -4px 12px rgba(0,0,0,0.06)",
-                zIndex: 0, // behind all folder rows
-                transition: "top 0.3s ease, height 0.3s ease, left 0.3s ease, width 0.3s ease",
-                pointerEvents: "none",
-              }}
-            />
-          );
-        })()}
-
         {folders.map((f, i) => {
           const w = minW + (maxW - minW) * (i / (total - 1));
+          const isHovered = hoveredIdx === i;
           
           const offsetX = (maxW - w) / 2;
           const top = i * rowH;
@@ -112,10 +82,10 @@ const FilingCabinet = () => {
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
             >
-              {/* Tab */}
+              {/* Tab that sticks up (behind paper) */}
               <div
                 style={{
-                  position: "absolute",
+                position: "absolute",
                   left: tabLeft,
                   top: -14,
                   width: tabWidth,
@@ -128,16 +98,37 @@ const FilingCabinet = () => {
                   alignItems: "flex-start",
                   justifyContent: "center",
                   paddingTop: 4,
+                  gap: 8,
                   fontSize: "11px",
                   color: f.isSection ? "#fff" : "#555",
                   fontWeight: f.isSection ? 500 : 400,
                   letterSpacing: "0.02em",
+                  zIndex: 3,
                 }}
               >
                 <span>{f.label}</span>
               </div>
 
-              {/* Folder body */}
+              {/* Paper that slides up — bottom flush with folder body top */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: w * 0.1,
+                  width: w * 0.8,
+                  bottom: rowH,
+                  height: 60,
+                  backgroundColor: "#fff",
+                  borderRadius: "3px 3px 0 0",
+                  boxShadow: isHovered ? "0 -2px 8px rgba(0,0,0,0.08)" : "none",
+                  transition: "transform 0.3s ease, opacity 0.3s ease",
+                  transform: isHovered ? "translateY(0)" : `translateY(${60}px)`,
+                  opacity: isHovered ? 1 : 0,
+                  zIndex: 1,
+                  overflow: "hidden",
+                }}
+              />
+
+              {/* Folder body - the visible edge/lip */}
               <div
                 style={{
                   position: "absolute",
@@ -150,6 +141,7 @@ const FilingCabinet = () => {
                   borderLeft: "1px solid #d0cfcc",
                   borderRight: "1px solid #d0cfcc",
                   boxShadow: "0 -1px 0 rgba(255,255,255,0.4)",
+                  zIndex: 2,
                 }}
               />
             </div>
