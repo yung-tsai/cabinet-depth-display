@@ -12,8 +12,9 @@ const BoxIllustration = () => {
   const tabR = 10;
   const innerPad = 8;
   const innerL = bx + innerPad;
-  const innerR = bx + bw - innerPad;
-  const innerW = innerR - innerL;
+  // Each folder narrows toward the back (top). Front folder (i=4) is widest.
+  const maxW = bw - innerPad * 2;
+  const narrowStep = 28; // px narrower per step toward back
 
   // The folders stick out above the box top
   const foldersTopY = 40;
