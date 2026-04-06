@@ -145,14 +145,42 @@ const FilingCabinet = () => {
       <div
         className="relative"
         style={{
-          width: maxW,
-          height: total * rowH + 20,
+          width: maxW + 20,
+          height: total * rowH + 80,
           marginTop: 30,
           opacity: isExpanded ? 0 : 1,
           transition: "opacity 0.3s ease",
           pointerEvents: isExpanded ? "none" : "auto",
         }}
       >
+        {/* Cabinet walls - U shape */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            borderLeft: "1px solid #c5c4c1",
+            borderRight: "1px solid #c5c4c1",
+            borderBottom: "1px solid #c5c4c1",
+            borderRadius: "0 0 4px 4px",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        {/* Folders container - offset inside walls */}
+        <div
+          className="relative"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 10,
+            right: 10,
+            height: total * rowH + 20,
+          }}
+        >
         {folders.map((f, i) => {
           const w = minW + (maxW - minW) * (i / (total - 1));
           const isHovered = hoveredIdx === i;
