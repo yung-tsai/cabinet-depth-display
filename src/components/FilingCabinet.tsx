@@ -41,13 +41,39 @@ const folders: FolderData[] = [
 const FilingCabinet = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const [visibleFolders, setVisibleFolders] = useState<Set<number>>(new Set());
   const [reEntering, setReEntering] = useState(false);
 
+  const total = folders.length;
+  const staggerDelay = 15; // ms between each folder
+
+  const cascadeIn = useCallback(() => {
+    // Bottom to top: last folder first
+    for (let i = 0; i < total; i++) {
+      const folderIdx = total - 1 - i;
+      setTimeout(() => {
+        setVisibleFolders((prev) => new Set(prev).add(folderIdx));
+      }, i * staggerDelay);
+    }
+  }, [total]);
+
+  const cascadeOut = useCallback(() => {
+    // Top to bottom: first folder disappears first
+    for (let i = 0; i < total; i++) {
+      setTimeout(() => {
+        setVisibleFolders((prev) => {
+          const next = new Set(prev);
+          next.delete(i);
+          return next;
+        });
+      }, i * staggerDelay);
+    }
+  }, [total]);
+
   useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 100);
+    const timer = setTimeout(() => cascadeIn(), 100);
     return () => clearTimeout(timer);
-  }, []);
+  }, [cascadeIn]);
 
   // Close on Esc
   useEffect(() => {
@@ -63,13 +89,12 @@ const FilingCabinet = () => {
   const handleClose = useCallback(() => {
     setExpandedIdx(null);
     setReEntering(true);
-    // Trigger re-entrance slide-up
-    setMounted(false);
+    cascadeOut();
     setTimeout(() => {
-      setMounted(true);
-      setTimeout(() => setReEntering(false), 800);
-    }, 50);
-  }, []);
+      cascadeIn();
+      setTimeout(() => setReEntering(false), total * staggerDelay + 300);
+    }, total * staggerDelay + 50);
+  }, [cascadeIn, cascadeOut, total, staggerDelay]);
 
   // Click outside
   const handleBackdropClick = useCallback(() => {
@@ -83,7 +108,6 @@ const FilingCabinet = () => {
     setHoveredIdx(null);
   }, []);
 
-  const total = folders.length;
   const minW = 330;
   const maxW = 510;
   const rowH = 22;
@@ -124,14 +148,15 @@ const FilingCabinet = () => {
           width: maxW,
           height: total * rowH + 20,
           marginTop: 30,
-          transform: mounted && !isExpanded ? "translateY(0)" : "translateY(100vh)",
-          opacity: mounted && !isExpanded ? 1 : 0,
-          transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease",
+          opacity: isExpanded ? 0 : 1,
+          transition: "opacity 0.3s ease",
+          pointerEvents: isExpanded ? "none" : "auto",
         }}
       >
         {folders.map((f, i) => {
           const w = minW + (maxW - minW) * (i / (total - 1));
           const isHovered = hoveredIdx === i;
+          const isVisible = visibleFolders.has(i);
 
           const offsetX = (maxW - w) / 2;
           const top = i * rowH;
@@ -154,6 +179,9 @@ const FilingCabinet = () => {
                 width: w,
                 height: rowH,
                 zIndex: i + 1,
+                transform: isVisible ? "translateY(0)" : "translateY(40px)",
+                opacity: isVisible ? 1 : 0,
+                transition: "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease",
               }}
             >
               {/* Tab + Paper hover zone */}
